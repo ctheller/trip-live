@@ -16,24 +16,24 @@
           <div>
             <h4>Hotels</h4>
             <select data-type="hotel" id="hotel-choices">
-              <option>Andaz Wall Street</option>
-              <option>...</option>
+<!--               <option>Andaz Wall Street</option>
+              <option>...</option> -->
             </select>
             <button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Restaurants</h4>
             <select data-type="restaurant" id="restaurant-choices">
-              <option>Bouley</option>
-              <option>...</option>
+      <!--         <option>Bouley</option>
+              <option>...</option> -->
             </select>
             <button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Activities</h4>
             <select data-type="activity" id="activity-choices">
-              <option>Mahayana Buddhist Temple Association</option>
-              <option>...</option>
+       <!--        <option>Mahayana Buddhist Temple Association</option>
+              <option>...</option> -->
             </select>
             <button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
@@ -42,10 +42,10 @@
     </div>
     <div class="col-xs-6 col-sm-12">
       <h3>
-        <span id="day-title">
+<!--         <span id="day-title">
           <span>Day 2</span>
           <button class="btn btn-xs btn-danger remove btn-circle">x</button>
-        </span>
+        </span> -->
       </h3>
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -61,8 +61,8 @@
             <h4>My Hotel</h4>
             <ul class="list-group">
               <div class="itinerary-item">
-                <span class="title">Andaz Wall Street</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <!-- <span class="title">Andaz Wall Street</span>
+                <button class="btn btn-xs btn-danger remove btn-circle">x</button> -->
               </div>
             </ul>
           </div>
@@ -70,8 +70,8 @@
             <h4>My Restaurants</h4>
             <ul class="list-group">
               <div class="itinerary-item">
-                <span class="title">Bouley</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+               <!--  <span class="title">Bouley</span>
+                <button class="btn btn-xs btn-danger remove btn-circle">x</button> -->
               </div>
             </ul>
           </div>
@@ -79,8 +79,8 @@
             <h4>My Activities</h4>
             <ul class="list-group">
               <div class="itinerary-item">
-                <span class="title">Mahayana Buddhist Temple Association</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <!-- <span class="title">Mahayana Buddhist Temple Association</span>
+                <button class="btn btn-xs btn-danger remove btn-circle">x</button> -->
               </div>
             </ul>
           </div>
@@ -89,4 +89,31 @@
     </div>
   </div>
 </div>
+
+<script>
+  {% autoescape false %}
+  var hotels = {{ hotels | json }};
+  var restaurants = {{ restaurants | json }};
+  var activities = {{ activities | json }};
+  {% endautoescape %}
+  console.log(hotels, restaurants, activities);
+
+  var hotelChoices = $("#hotel-choices");
+  hotels.forEach(function(hotel){
+    hotelChoices.append("<option>"+hotel.name+"</option>");
+  });
+
+  var restaurantChoices = $("#restaurant-choices");
+  restaurants.forEach(function(restaurant){
+    restaurantChoices.append("<option>"+restaurant.name+"</option>");
+  });
+
+   var activityChoices = $("#activity-choices");
+  activities.forEach(function(activity){
+    activityChoices.append("<option>"+activity.name+"</option>");
+  });
+
+</script>
+
 {% endblock %}
+
