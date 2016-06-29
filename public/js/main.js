@@ -6,6 +6,7 @@ var allItineraries = {
     2: {hotel:[], restaurant:[], activity:[], markers:[]},
     3: {hotel:[], restaurant:[], activity:[], markers:[]},
     };
+var currentDayNum = $(".current-day").text();
 
 $(function initializeMap (){
 
@@ -64,13 +65,13 @@ function drawMarker (type, name, coords) {
     icon: iconURL,
     position: latLng
   });
-  var currentDayNum = $(".current-day").text();
+  // var currentDayNum = $(".current-day").text();
   allItineraries[currentDayNum].markers.push({name: name, marker: marker});
   marker.setMap(currentMap);
 }  
 
 function removeMarker (name) {
-  var currentDayNum = $(".current-day").text();
+  // var currentDayNum = $(".current-day").text();
   for (var i = 0; i<allItineraries[currentDayNum].markers.length; i++){
       if (allItineraries[currentDayNum].markers[i].name === name){
         allItineraries[currentDayNum].markers.splice(i);
@@ -79,14 +80,14 @@ function removeMarker (name) {
 }
 
 function resetMarkers(){
-  var currentDayNum = $(".current-day").text();
+  // var currentDayNum = $(".current-day").text();
   allItineraries[currentDayNum].markers.forEach(function(elem){
       elem.marker.setMap(null);
   })
 }
 
 function loadMarkers(){
-  var currentDayNum = $(".current-day").text();
+  // var currentDayNum = $(".current-day").text();
   allItineraries[currentDayNum].markers.forEach(function(elem){
       elem.marker.setMap(currentMap);
   })
@@ -102,7 +103,7 @@ function loadMarkers(){
     else if (whereToAdd.children().text().match(text)) return;
     whereToAdd.append("<div class=\"itinerary-item\"><span data-type="+type+" class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
     
-    var currentDayNum = $(".current-day").text();
+    // var currentDayNum = $(".current-day").text();
     allItineraries[currentDayNum][type].push(text);
 
     hotels.forEach(function(hotel){
@@ -127,7 +128,7 @@ function loadMarkers(){
     var text=($(this).prev()).text();
     removeMarker(text);
     var type=$(this).prev().data("type");
-    var currentDayNum = $(".current-day").text();
+    // var currentDayNum = $(".current-day").text();
     for (var i = 0; i<allItineraries[currentDayNum][type].length; i++){
       if (allItineraries[currentDayNum][type][i] === text){
         allItineraries[currentDayNum][type].splice(i);
@@ -150,7 +151,7 @@ function loadMarkers(){
     $(".current-day").removeClass("current-day");
     $(this).addClass("current-day");
     //load any saved activities from the day
-    var currentDayNum = $(".current-day").text();
+    currentDayNum = $(".current-day").text();
     var hotel = allItineraries[currentDayNum].hotel[0];
     if (hotel){
       var whereToAdd = $(".list-group.hotel");
