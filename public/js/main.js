@@ -77,6 +77,7 @@ function removeMarker (name) {
     var whereToAdd = $(".list-group."+type);
     if (whereToAdd.children().length && type==="hotel") return;
     else if (whereToAdd.children().length >= 3) return;
+    else if (whereToAdd.children().text().match(text)) return;
     whereToAdd.append("<div class=\"itinerary-item\"><span class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
     
     hotels.forEach(function(hotel){
