@@ -1,6 +1,11 @@
 var currentMap;
 var markers = [];
 var dayCount = 4;
+var allItineraries = {
+    1: {hotel:[], restaurant:[], activity:[], markers:[]},
+    2: {hotel:[], restaurant:[], activity:[], markers:[]},
+    3: {hotel:[], restaurant:[], activity:[], markers:[]},
+    };
 
 $(function initializeMap (){
 
@@ -59,12 +64,14 @@ function drawMarker (type, name, coords) {
     icon: iconURL,
     position: latLng
   });
-  markers.push({name: name, marker: marker});
+  var currentDayNum = $(".current-day").text();
+  allItineraries[currentDayNum].markers.push({name: name, marker: marker});
   marker.setMap(currentMap);
 }  
 
 function removeMarker (name) {
-  markers.forEach(function(elem){
+  var currentDayNum = $(".current-day").text();
+  allItineraries[currentDayNum].markers.forEach(function(elem){
     if (elem.name === name){ 
       elem.marker.setMap(null);
     }
@@ -81,6 +88,9 @@ function removeMarker (name) {
     else if (whereToAdd.children().text().match(text)) return;
     whereToAdd.append("<div class=\"itinerary-item\"><span class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
     
+    var currentDayNum = $(".current-day").text();
+    allItineraries[currentDayNum][type].push(text);
+
     hotels.forEach(function(hotel){
         if (hotel.name === text){
           drawMarker(type, text, hotel.place.location);
@@ -106,10 +116,13 @@ function removeMarker (name) {
     $(this).parent().remove();
   })
 
-  //add day
-  $('#day-add').on("click", function(event){
-    console.log("something");
-    $(this).prev().after("<button class=\"btn btn-circle day-btn\">"+(dayCount++)+"</button>")
+  //When you Click a different day
+  $(".day-buttons").on('click', 'button', function(event){
+    console.log($(this).text());
   })
 
-
+  //add day
+  $('#day-add').on("click", function(event){
+    allItineraries[dayCount] = {hotel:[], restaurant:[], activity:[], markers:[]},
+    $(this).before("<button class=\"btn btn-circle day-btn\">"+(dayCount++)+"</button>")
+  })
