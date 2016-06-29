@@ -60,28 +60,20 @@
           <div>
             <h4>My Hotel</h4>
             <ul class="list-group hotel">
-              <div class="itinerary-item">
-                <!-- <span class="title">Andaz Wall Street</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button> -->
-              </div>
+<!--               <div class="itinerary-item">
+                <span class="title">Andaz Wall Street</span>
+                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+              </div> -->
             </ul>
           </div>
           <div>
             <h4>My Restaurants</h4>
             <ul class="list-group restaurant">
-              <div class="itinerary-item">
-               <!--  <span class="title">Bouley</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button> -->
-              </div>
             </ul>
           </div>
           <div>
             <h4>My Activities</h4>
             <ul class="list-group activity">
-              <div class="itinerary-item">
-                <!-- <span class="title">Mahayana Buddhist Temple Association</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button> -->
-              </div>
             </ul>
           </div>
         </div>
@@ -92,35 +84,29 @@
 
 <script>
   {% autoescape false %}
+  //Load Info into Dropdowns
   var hotels = {{ hotels | json }};
   var restaurants = {{ restaurants | json }};
   var activities = {{ activities | json }};
   {% endautoescape %}
-  console.log(hotels, restaurants, activities);
 
   var hotelChoices = $("#hotel-choices");
   hotels.forEach(function(hotel){
+    var location = hotel.place.location;
     hotelChoices.append("<option>"+hotel.name+"</option>");
   });
 
   var restaurantChoices = $("#restaurant-choices");
   restaurants.forEach(function(restaurant){
+    var location = restaurant.place.location;
     restaurantChoices.append("<option>"+restaurant.name+"</option>");
   });
 
    var activityChoices = $("#activity-choices");
   activities.forEach(function(activity){
+    var location = activity.place.location;
     activityChoices.append("<option>"+activity.name+"</option>");
   });
-
-$('#options-panel').on("click","button", function(event){
-var classX=$(this).prev().attr("id").split("-")[0];
-var text=($(this).prev()).val();
-$(".list-group ."+classX).append("<div class=\"itinerary-item\"><span class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
-console.log(text);
-console.log(classX);
-})
-
 
 </script>
 

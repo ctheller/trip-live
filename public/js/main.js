@@ -1,3 +1,6 @@
+var currentMap;
+var markers = [];
+
 $(function initializeMap (){
 
   var fullstackAcademy = new google.maps.LatLng(40.705086, -74.009151);
@@ -33,31 +36,70 @@ $(function initializeMap (){
 
   var mapCanvas = document.getElementById('map-canvas');
 
-  var currentMap = new google.maps.Map(mapCanvas, {
+  currentMap = new google.maps.Map(mapCanvas, {
     center: fullstackAcademy,
     zoom: 13,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: styleArr
   });
 
-  var iconURLs = {
+});
+
+var iconURLs = {
     hotel: '/images/lodging_0star.png',
     restaurant: '/images/restaurant.png',
     activity: '/images/star-3.png'
   };
 
-  function drawMarker (type, coords) {
-    var latLng = new google.maps.LatLng(coords[0], coords[1]);
-    var iconURL = iconURLs[type];
-    var marker = new google.maps.Marker({
-      icon: iconURL,
-      position: latLng
-    });
-    marker.setMap(currentMap);
-  }
+function drawMarker (type, name, coords) {
+  var latLng = new google.maps.LatLng(coords[0], coords[1]);
+  var iconURL = iconURLs[type];
+  var marker = new google.maps.Marker({
+    icon: iconURL,
+    position: latLng
+  });
+  markers.push({name: name, marker: marker});
+  marker.setMap(currentMap);
+}  
 
-  // drawMarker('hotel', [40.705137, -74.007624]);
-  // drawMarker('restaurant', [40.705137, -74.013940]);
-  // drawMarker('activity', [40.716291, -73.995315]);
+function removeMarker (name) {
+  markers.forEach(function(elem){
+    if (elem.name === name){ 
+      elem.marker.setMap(null);
+    }
+  })
+}
 
-});
+//Add Items to Itinerary
+  $('#options-panel').on("click","button", function(event){
+    var type=$(this).prev().data("type");
+    var text=($(this).prev()).val();
+    var whereToAdd = $(".list-group."+type);
+    if (whereToAdd.children().length && type==="hotel") return;
+    else if (whereToAdd.children().length >= 3) return;
+    whereToAdd.append("<div class=\"itinerary-item\"><span class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
+    
+    hotels.forEach(function(hotel){
+        if (hotel.name === text){
+          drawMarker(type, text, hotel.place.location);
+        }
+      });
+    restaurants.forEach(function(restaurant){
+        if (restaurant.name === text){
+          drawMarker(type, text, restaurant.place.location);
+        }
+      });
+    activities.forEach(function(activity){
+        if (activity.name === text){
+          drawMarker(type, text, activity.place.location);
+        }
+      });
+  });
+
+  //Remove Items from Itinerary
+  $('#itinerary').on("click", "button", function(event){
+    var text=($(this).prev()).text();
+    console.log(text);
+    removeMarker(text);
+    $(this).parent().remove();
+  })
