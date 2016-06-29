@@ -1,5 +1,6 @@
 var currentMap;
 var markers = [];
+var dayCount = 4;
 
 $(function initializeMap (){
 
@@ -104,3 +105,11 @@ function removeMarker (name) {
     removeMarker(text);
     $(this).parent().remove();
   })
+
+  //add day
+  $('#day-add').on("click", function(event){
+    console.log("something");
+    $(this).prev().after("<button class=\"btn btn-circle day-btn\">"+(dayCount++)+"</button>")
+  })
+
+
