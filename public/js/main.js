@@ -145,7 +145,26 @@ function loadMarkers(){
   $(".day-buttons").on('click', 'button', function(event){
     resetMarkers();
     hideItinerary();
-
+    //change current day
+    $(".current-day").removeClass("current-day");
+    $(this).addClass("current-day");
+    //load any saved activities from the day
+    var currentDayNum = $(".current-day").text();
+    var hotel = allItineraries[currentDayNum].hotel[0];
+    if (hotel){
+      var whereToAdd = $(".list-group.hotel");
+      whereToAdd.append("<div class=\"itinerary-item\"><span data-type=\"hotel\" class=\"title\">"+hotel+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
+    }
+    allItineraries[currentDayNum].restaurant.forEach(function(resto){
+      var whereToAdd = $(".list-group.restaurant");
+      whereToAdd.append("<div class=\"itinerary-item\"><span data-type=\"restaurant\" class=\"title\">"+resto+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
+    })
+    allItineraries[currentDayNum].activity.forEach(function(activity){
+      var whereToAdd = $(".list-group.activity");
+      whereToAdd.append("<div class=\"itinerary-item\"><span data-type=\"activity\" class=\"title\">"+activity+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
+    })
+    
+    loadMarkers();
   })
 
   //add day
