@@ -81,6 +81,7 @@ function removeMarker (name) {
 
 function resetMarkers(){
   // var currentDayNum = $(".current-day").text();
+  if (!allItineraries[currentDayNum]) return;
   allItineraries[currentDayNum].markers.forEach(function(elem){
       elem.marker.setMap(null);
   })
@@ -142,16 +143,16 @@ function loadMarkers(){
     $(".list-group").children().remove();
   }
 
-  //When you click a different day
-  $(".day-buttons").on('click', 'button', function(event){
-    if ($(this).text() === "+") return;
+  var changeDay = function(newDay){
+    if (newDay.text() === "+") return;
     resetMarkers();
     hideItinerary();
     //change current day
     $(".current-day").removeClass("current-day");
-    $(this).addClass("current-day");
+    newDay.addClass("current-day");
     //load any saved activities from the day
     currentDayNum = $(".current-day").text();
+
     var hotel = allItineraries[currentDayNum].hotel[0];
     if (hotel){
       var whereToAdd = $(".list-group.hotel");
@@ -167,10 +168,37 @@ function loadMarkers(){
     })
     
     loadMarkers();
+  }
+
+  //When you click a different day
+  $(".day-buttons").on('click', 'button', function(event){
+    changeDay($(this));
   })
 
   //add day
   $('#day-add').on("click", function(event){
     allItineraries[dayCount] = {hotel:[], restaurant:[], activity:[], markers:[]},
-    $(this).before("<button class=\"btn btn-circle day-btn\">"+(dayCount++)+"</button>")
+    $(this).before("<button class=\"btn btn-circle day-btn\">"+(dayCount++)+"</button>");
   })
+
+  //delete day:
+  $('#delete-day').on("click", function(event){
+    if (dayCount < 2) return;
+
+    var start = currentDayNum;
+    while (allItineraries.hasOwnProperty(start)) {
+      allItineraries[start] = allItineraries[parseInt(start)+1];
+      start++;
+    }
+
+    // resetMarkers();
+    // hideItinerary();
+
+    $('#day-add').prev().remove();
+    dayCount--;
+    var next = $(".current-day");
+    if (!next) {
+      next = $('#day-add').prev();
+    }
+    changeDay(next);
+  });
