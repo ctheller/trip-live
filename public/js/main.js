@@ -143,6 +143,7 @@ function loadMarkers(){
 
   //When you click a different day
   $(".day-buttons").on('click', 'button', function(event){
+    if ($(this).text() === "+") return;
     resetMarkers();
     hideItinerary();
     //change current day
