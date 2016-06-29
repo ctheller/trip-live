@@ -71,10 +71,24 @@ function drawMarker (type, name, coords) {
 
 function removeMarker (name) {
   var currentDayNum = $(".current-day").text();
-  allItineraries[currentDayNum].markers.forEach(function(elem){
-    if (elem.name === name){ 
-      elem.marker.setMap(null);
+  for (var i = 0; i<allItineraries[currentDayNum].markers.length; i++){
+      if (allItineraries[currentDayNum].markers[i].name === name){
+        allItineraries[currentDayNum].markers.splice(i);
+      }
     }
+}
+
+function resetMarkers(){
+  var currentDayNum = $(".current-day").text();
+  allItineraries[currentDayNum].markers.forEach(function(elem){
+      elem.marker.setMap(null);
+  })
+}
+
+function loadMarkers(){
+  var currentDayNum = $(".current-day").text();
+  allItineraries[currentDayNum].markers.forEach(function(elem){
+      elem.marker.setMap(currentMap);
   })
 }
 
@@ -86,7 +100,7 @@ function removeMarker (name) {
     if (whereToAdd.children().length && type==="hotel") return;
     else if (whereToAdd.children().length >= 3) return;
     else if (whereToAdd.children().text().match(text)) return;
-    whereToAdd.append("<div class=\"itinerary-item\"><span class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
+    whereToAdd.append("<div class=\"itinerary-item\"><span data-type="+type+" class=\"title\">"+text+"</span><button class=\"btn btn-xs btn-danger remove btn-circle\">x</button></div>")
     
     var currentDayNum = $(".current-day").text();
     allItineraries[currentDayNum][type].push(text);
@@ -111,14 +125,27 @@ function removeMarker (name) {
   //Remove Items from Itinerary
   $('#itinerary').on("click", "button", function(event){
     var text=($(this).prev()).text();
-    console.log(text);
     removeMarker(text);
+    var type=$(this).prev().data("type");
+    var currentDayNum = $(".current-day").text();
+    for (var i = 0; i<allItineraries[currentDayNum][type].length; i++){
+      if (allItineraries[currentDayNum][type][i] === text){
+        allItineraries[currentDayNum][type].splice(i);
+      }
+    }
     $(this).parent().remove();
-  })
+  });
 
-  //When you Click a different day
+  //Hide Itinerary
+  var hideItinerary= function(){
+    $(".list-group").children().remove();
+  }
+
+  //When you click a different day
   $(".day-buttons").on('click', 'button', function(event){
-    console.log($(this).text());
+    resetMarkers();
+    hideItinerary();
+
   })
 
   //add day
