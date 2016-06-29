@@ -144,9 +144,13 @@ function loadMarkers(){
   }
 
   var changeDay = function(newDay){
-    if (newDay.text() === "+") return;
+    debugger;
+    if (newDay.text() === "+") {
+      newDay = newDay.prev();
+      }
     resetMarkers();
     hideItinerary();
+    if (!newDay.text()) return;
     //change current day
     $(".current-day").removeClass("current-day");
     newDay.addClass("current-day");
@@ -184,21 +188,15 @@ function loadMarkers(){
   //delete day:
   $('#delete-day').on("click", function(event){
     if (dayCount < 2) return;
-
+    resetMarkers();
     var start = currentDayNum;
     while (allItineraries.hasOwnProperty(start)) {
       allItineraries[start] = allItineraries[parseInt(start)+1];
       start++;
     }
 
-    // resetMarkers();
-    // hideItinerary();
-
-    $('#day-add').prev().remove();
     dayCount--;
-    var next = $(".current-day");
-    if (!next) {
-      next = $('#day-add').prev();
-    }
-    changeDay(next);
+    $('#day-add').prev().remove();
+
+    changeDay($(".current-day"));
   });
